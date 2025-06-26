@@ -1,7 +1,6 @@
 import userApi from "@/apis/user.api";
 import Input from "@/components/Input";
 import httpStatusCode from "@/constants/httpStatusCode";
-import { AppContext } from "@/context/app.context";
 import { registerSchema } from "@/utils/validation";
 import { Ionicons } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,7 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import moment from "moment";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Controller, Resolver, useForm } from "react-hook-form";
 import {
 	ActivityIndicator,
@@ -33,7 +32,6 @@ const formData = registerSchema;
 type FormData = yup.InferType<typeof formData>;
 
 export default function RegisterSreen() {
-	const { setIsAuthenticated, setProfile } = useContext(AppContext);
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const [tempDate, setTempDate] = useState<Date | null>(null);
 	const router = useRouter();
@@ -60,39 +58,39 @@ export default function RegisterSreen() {
 		mutationFn: userApi.register,
 	});
 
-	const handleSubmitForm = handleSubmit(async (data) => {
-		try {
-			const payload = {
-				...data,
-				date_of_birth: new Date(data.date_of_birth as Date).toISOString(),
-			};
-			const res = await registerMutation.mutateAsync(payload);
-			setIsAuthenticated(true);
-			setProfile(res.data.data.user);
-			Alert.alert(
-				res.data.message,
-				"Vui lòng kiểm tra email để xác thực tài khoản.",
-				[
-					{
-						text: "OK",
-						onPress: () => router.push("/(protected)/verify-email"),
-					},
-				],
-				{ cancelable: false }
-			);
-		} catch (error: any) {
-			if (error.status === httpStatusCode.UnprocessableEntity) {
-				const formError = error.response?.data?.errors;
-				if (formError) {
-					Object.keys(formError).forEach((key) => {
-						setError(key as keyof FormData, {
-							message: formError[key as keyof FormData]["msg"],
-							type: "Server",
+	const handleSubmitForm = handleSubmit((data) => {
+		const payload = {
+			...data,
+			date_of_birth: new Date(data.date_of_birth as Date).toISOString(),
+		};
+		registerMutation.mutate(payload, {
+			onSuccess(r) {
+				console.log(123);
+				Alert.alert(
+					r.data.message,
+					"Vui lòng kiểm tra email để xác thực tài khoản.",
+					[
+						{
+							text: "OK",
+							onPress: () => router.replace("/verify-email"),
+						},
+					]
+				);
+			},
+			onError(error: any) {
+				if (error.status === httpStatusCode.UnprocessableEntity) {
+					const formError = error.response?.data?.errors;
+					if (formError) {
+						Object.keys(formError).forEach((key) => {
+							setError(key as keyof FormData, {
+								message: formError[key as keyof FormData]["msg"],
+								type: "Server",
+							});
 						});
-					});
+					}
 				}
-			}
-		}
+			},
+		});
 	});
 	return (
 		<KeyboardAvoidingView

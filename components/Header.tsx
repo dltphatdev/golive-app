@@ -29,7 +29,6 @@ export default function Header({ onSendData }: Props) {
 			onSendData?.(dataStep);
 		}
 	}, [dataStep, onSendData]);
-	console.log(profile);
 	const handlePressNavigateSetting = () => router.push("/(protected)/setting");
 	return (
 		<View style={styles.header}>

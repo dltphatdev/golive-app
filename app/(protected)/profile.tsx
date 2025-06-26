@@ -4,6 +4,7 @@ import CONFIG from "@/constants/config";
 import httpStatusCode from "@/constants/httpStatusCode";
 import { AppContext } from "@/context/app.context";
 import { BodyUserProfile } from "@/types/user";
+import { setProfileToLS } from "@/utils/auth";
 import { updateProfileSchema } from "@/utils/validation";
 import { Ionicons } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -118,8 +119,8 @@ export default function ProfileScreen() {
 				}
 			}
 			const res = await updateProfileMutation.mutateAsync(payload);
-			console.log(res.data.data);
 			setProfile(res.data.data);
+			setProfileToLS(res.data.data);
 			Alert.alert(
 				res.data.message,
 				"Thông báo cập nhật tài khoản",
@@ -211,10 +212,10 @@ export default function ProfileScreen() {
 				return;
 			}
 
-			if (fileInfo.size && fileInfo.size > 1 * 1024 * 1024) {
+			if (fileInfo.size && fileInfo.size > 2 * 1024 * 1024) {
 				Alert.alert(
 					"Thông báo",
-					"Dung lượng tối đa là 1MB",
+					"Dung lượng ảnh tối đa là 2MB",
 					[
 						{
 							text: "OK",

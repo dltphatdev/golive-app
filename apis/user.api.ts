@@ -20,7 +20,7 @@ const userApi = {
 		return http.instance.post<UserSuccessResponeApi>(URL_LOGIN, body);
 	},
 	register(body: RegisterReqBody) {
-		return http.instance.post<UserSuccessResponeApi>(URL_REGISTER, body);
+		return http.instance.post<{ message: string }>(URL_REGISTER, body);
 	},
 	verifyEmailUser(body: { verify_code: string }) {
 		return http.instance.post<{ message: string }>("user/verify-email", body);

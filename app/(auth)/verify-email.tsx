@@ -55,7 +55,7 @@ export default function VerifyEmailScreen() {
 				[
 					{
 						text: "OK",
-						onPress: () => router.push("/(protected)/(tabs)"),
+						onPress: () => router.push("/login"),
 					},
 				],
 				{ cancelable: false }

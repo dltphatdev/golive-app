@@ -1,7 +1,9 @@
+import { formatedDate } from "@/utils/common";
 import { Feather } from "@expo/vector-icons";
 import {
 	Dimensions,
 	Image,
+	ImageSourcePropType,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
@@ -10,26 +12,38 @@ import {
 const { width } = Dimensions.get("window");
 const cardWidth = (width - 34) / 2; // 2 columns with padding
 
-export default function NewsItem() {
+interface Props {
+	newsItem: {
+		id: number;
+		title: string;
+		image: ImageSourcePropType;
+	};
+}
+
+export default function NewsItem({ newsItem }: Props) {
 	return (
 		<TouchableOpacity style={styles.newsItem}>
-			<Image
-				source={require("@/assets/images/news.png")}
-				style={styles.newsImg}
-			/>
+			<Image source={newsItem.image} style={styles.newsImg} />
 			<View style={styles.newsContent}>
 				<View style={styles.newsContainerTitle}>
-					<Text style={styles.newsTitle} numberOfLines={1}>
-						Nội dung sự kiện: Tin tức chó...
+					<Text style={styles.newsTitle} numberOfLines={2}>
+						{newsItem.title}
 					</Text>
 				</View>
+				{/* <View style={styles.newsContainerTitle}>
+					<Text style={styles.newsTitle} numberOfLines={2}>
+						{newsItem.description}
+					</Text>
+				</View> */}
 				<View style={styles.meta}>
 					<View style={styles.likes}>
 						<Feather name="heart" size={14} color="#fff" />
 						<Text style={styles.metaText}>3.4k</Text>
 					</View>
 					<View style={styles.boxMetaText}>
-						<Text style={styles.metaText}>19:00 23/05/2025</Text>
+						<Text style={styles.metaText}>
+							{formatedDate(new Date().toISOString())}
+						</Text>
 					</View>
 				</View>
 			</View>
@@ -61,12 +75,14 @@ const styles = StyleSheet.create({
 		paddingVertical: 3,
 		paddingInline: 8,
 		borderRadius: 14,
-		backgroundColor: "rgba(161,161,162,0.4)",
+
+		backgroundColor: "rgba(146, 146, 146, 0.6)",
 	},
 	newsTitle: {
 		fontSize: 13,
 		color: "#fff",
 		fontWeight: "500",
+		textTransform: "uppercase",
 	},
 	meta: {
 		flexDirection: "row",

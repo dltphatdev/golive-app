@@ -6,6 +6,7 @@ import WeeklyChart from "@/components/WeeklyChart";
 import useStepSyncOnFocus from "@/hooks/useStepSyncOnFocus";
 import useStepWhenAppOpen from "@/hooks/useStepWhenAppOpen";
 import { ChartStep, GetStepRes } from "@/types/step";
+import { clearLS } from "@/utils/auth";
 import { useQuery } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
@@ -18,11 +19,11 @@ export default function HomeScreen() {
 
 	useStepWhenAppOpen(); // Khi mở app
 	useStepSyncOnFocus(); // Khi app quay lại
-
 	const getStepLogMutation = useQuery({
 		queryKey: ["get_step_logs"],
 		queryFn: stepApi.getStepLog,
 	});
+	clearLS();
 
 	const getStepLogs = getStepLogMutation.data?.data.data.logs;
 

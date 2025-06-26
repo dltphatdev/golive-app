@@ -19,12 +19,9 @@ interface SlideData {
 }
 
 const slideData: SlideData[] = [
-	{ id: "1", image: require("@/assets/images/slide.png") },
-	{ id: "2", image: require("@/assets/images/slide.png") },
-	{ id: "3", image: require("@/assets/images/slide.png") },
-	{ id: "4", image: require("@/assets/images/slide.png") },
-	{ id: "5", image: require("@/assets/images/slide.png") },
-	{ id: "6", image: require("@/assets/images/slide.png") },
+	{ id: "1", image: require("@/assets/images/b1.jpg") },
+	{ id: "2", image: require("@/assets/images/b2.jpg") },
+	{ id: "3", image: require("@/assets/images/b3.jpg") },
 ];
 
 const SlideCarousel: React.FC = () => {
@@ -134,6 +131,7 @@ const styles = StyleSheet.create({
 	},
 	image: {
 		width: "100%",
+		height: 130,
 	},
 	dotsContainer: {
 		flexDirection: "row",

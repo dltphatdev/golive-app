@@ -165,11 +165,11 @@ const styles = StyleSheet.create({
 	},
 	metricCardBottomSpointMinus: {
 		paddingVertical: 6,
-		paddingInline: 10,
+		paddingInline: 6,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "space-between",
-		gap: 4,
+		gap: 3,
 		overflow: "hidden",
 		borderTopLeftRadius: 5,
 		borderTopRightRadius: 20,
