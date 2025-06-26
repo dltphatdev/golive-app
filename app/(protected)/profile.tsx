@@ -118,6 +118,7 @@ export default function ProfileScreen() {
 				}
 			}
 			const res = await updateProfileMutation.mutateAsync(payload);
+			console.log(res.data.data);
 			setProfile(res.data.data);
 			Alert.alert(
 				res.data.message,
