@@ -1,15 +1,12 @@
-// import withGoogleFit from "./plugins/with-google-fit";
+import withGoogleFit from "./plugins/with-google-fit";
 
 export default {
 	expo: {
 		name: "golive",
 		slug: "golive",
 		version: "1.0.0",
-		icon: "./assets/golive-logo-streaming.png",
-		plugins: [
-			// withGoogleFit,
-			"expo-router",
-		],
+		icon: "./assets/images/app-icon.png",
+		plugins: [withGoogleFit, "expo-router"],
 		android: {
 			permissions: ["ACTIVITY_RECOGNITION"],
 			package: "com.anonymous.golive",
