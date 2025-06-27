@@ -3,10 +3,8 @@ import Constants from "expo-constants";
 export const isRunningInBuild = Constants.appOwnership !== "expo";
 
 const CONFIG = {
-	// SERVER_URL: "http://192.168.1.39:9000/",
-	// API_ENPOINT: "http://192.168.1.39:9000/api/",
-	SERVER_URL: "http://10.10.10.106:9000/",
-	API_ENPOINT: "http://10.10.10.106:9000/api/",
+	SERVER_URL: "http://api-app.golive.com.vn/",
+	API_ENPOINT: "http://api-app.golive.com.vn/api/",
 	ENPOINT_TIMEOUT: 18000,
 } as const;
 
