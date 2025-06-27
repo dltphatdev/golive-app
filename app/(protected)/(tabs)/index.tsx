@@ -6,12 +6,21 @@ import WeeklyChart from "@/components/WeeklyChart";
 import useStepSyncOnFocus from "@/hooks/useStepSyncOnFocus";
 import useStepWhenAppOpen from "@/hooks/useStepWhenAppOpen";
 import { ChartStep, GetStepRes } from "@/types/step";
-import { clearLS } from "@/utils/auth";
+import { getGoogleFitDataAndroid } from "@/utils/googleFit";
+import { getAppleHealthDataIOS } from "@/utils/iosFit";
 import { useQuery } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+	Alert,
+	Platform,
+	SafeAreaView,
+	ScrollView,
+	StyleSheet,
+	Text,
+	View,
+} from "react-native";
 
 export default function HomeScreen() {
 	const [dataStep, setDataStep] = useState<GetStepRes>();
@@ -19,11 +28,31 @@ export default function HomeScreen() {
 
 	useStepWhenAppOpen(); // Khi mở app
 	useStepSyncOnFocus(); // Khi app quay lại
+
+	useEffect(() => {
+		(async function () {
+			if (Platform.OS === "ios") {
+				const data = await getAppleHealthDataIOS();
+				Alert.alert("Thông báo", "ISO Step", [
+					{
+						text: data?.steps.toString(),
+					},
+				]);
+			} else if (Platform.OS === "android") {
+				const data = await getGoogleFitDataAndroid();
+				Alert.alert("Thông báo", "Android Step", [
+					{
+						text: data?.steps.toString(),
+					},
+				]);
+			}
+		})();
+	}, []);
+
 	const getStepLogMutation = useQuery({
 		queryKey: ["get_step_logs"],
 		queryFn: stepApi.getStepLog,
 	});
-	clearLS();
 
 	const getStepLogs = getStepLogMutation.data?.data.data.logs;
 

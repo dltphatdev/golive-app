@@ -8,13 +8,7 @@ export default function useStepWhenAppOpen() {
 			const steps = getMockStepData();
 			// if (!isRunningInBuild) {
 			// } else {
-			// 	if (Platform.OS === "ios") {
-			// 		const data = await getAppleHealthDataIOS();
-			// 		steps = data?.steps || 0;
-			// 	} else if (Platform.OS === "android") {
-			// 		const data = await getGoogleFitDataAndroid();
-			// 		steps = data?.steps || 0;
-			// 	}
+
 			// }
 			const start = new Date();
 			start.setHours(0, 0, 0, 0);

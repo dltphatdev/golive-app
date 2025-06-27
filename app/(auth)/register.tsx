@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useMutation } from "@tanstack/react-query";
+
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import moment from "moment";
@@ -58,39 +59,37 @@ export default function RegisterSreen() {
 		mutationFn: userApi.register,
 	});
 
-	const handleSubmitForm = handleSubmit((data) => {
-		const payload = {
-			...data,
-			date_of_birth: new Date(data.date_of_birth as Date).toISOString(),
-		};
-		registerMutation.mutate(payload, {
-			onSuccess(r) {
-				console.log(123);
-				Alert.alert(
-					r.data.message,
-					"Vui lòng kiểm tra email để xác thực tài khoản.",
-					[
-						{
-							text: "OK",
-							onPress: () => router.replace("/verify-email"),
-						},
-					]
-				);
-			},
-			onError(error: any) {
-				if (error.status === httpStatusCode.UnprocessableEntity) {
-					const formError = error.response?.data?.errors;
-					if (formError) {
-						Object.keys(formError).forEach((key) => {
-							setError(key as keyof FormData, {
-								message: formError[key as keyof FormData]["msg"],
-								type: "Server",
-							});
+	const handleSubmitForm = handleSubmit(async (data) => {
+		try {
+			const payload = {
+				...data,
+				date_of_birth: new Date(data.date_of_birth as Date).toISOString(),
+			};
+
+			const res = await registerMutation.mutateAsync(payload);
+			Alert.alert(
+				res.data.message,
+				"Vui lòng kiểm tra email để xác thực tài khoản.",
+				[
+					{
+						text: "OK",
+						onPress: () => router.replace("/verify-email"),
+					},
+				]
+			);
+		} catch (error: any) {
+			if (error.status === httpStatusCode.UnprocessableEntity) {
+				const formError = error.response?.data?.errors;
+				if (formError) {
+					Object.keys(formError).forEach((key) => {
+						setError(key as keyof FormData, {
+							message: formError[key as keyof FormData]["msg"],
+							type: "Server",
 						});
-					}
+					});
 				}
-			},
-		});
+			}
+		}
 	});
 	return (
 		<KeyboardAvoidingView
