@@ -1,11 +1,20 @@
+import stepApi from "@/apis/step.api";
 import HeaderSpoint from "@/assets/images/header-spoint.svg";
 import StrakeIcon from "@/assets/images/strake.svg";
+import { formatNumberCurrency } from "@/utils/common";
 import { Ionicons } from "@expo/vector-icons";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function HeaderOther() {
 	const router = useRouter();
+	const getStepMutation = useQuery({
+		queryKey: ["get_step"],
+		queryFn: stepApi.getStep,
+	});
+
+	const dataStep = getStepMutation.data?.data.data;
 	return (
 		<View style={styles.header}>
 			<View style={styles.headerLeft}>
@@ -14,7 +23,9 @@ export default function HeaderOther() {
 				</TouchableOpacity>
 				<View style={styles.headerStrake}>
 					<StrakeIcon width={14} height={18} />
-					<Text style={styles.headerStrakeText}>Chuỗi 2 ngày liên tục</Text>
+					<Text style={styles.headerStrakeText}>
+						Chuỗi {dataStep?.lastStreakCount || 0} ngày liên tục
+					</Text>
 				</View>
 			</View>
 			<TouchableOpacity
@@ -22,7 +33,9 @@ export default function HeaderOther() {
 				onPress={() => router.push("/(protected)/history")}
 			>
 				<HeaderSpoint width={21} />
-				<Text style={styles.headerSpointNumber}>3.034</Text>
+				<Text style={styles.headerSpointNumber}>
+					{formatNumberCurrency(dataStep?.stepLogToday.spoint_earned || 0)}
+				</Text>
 			</TouchableOpacity>
 		</View>
 	);

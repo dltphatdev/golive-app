@@ -79,7 +79,8 @@ const menus = [
 						color="rgba(255, 255, 255, 0.9)"
 					/>
 				),
-				name: "Hướng dẫn sử dụng",
+				name: "Điều khoản sử dụng",
+				path: "/(protected)/terms-of-service",
 			},
 			{
 				icon: (
@@ -90,6 +91,7 @@ const menus = [
 					/>
 				),
 				name: "Chính sách bảo mật",
+				path: "/(protected)/privacy-policy",
 			},
 			{
 				icon: (
@@ -99,7 +101,8 @@ const menus = [
 						color="rgba(255, 255, 255, 0.9)"
 					/>
 				),
-				name: "Điều khoản sử dụng",
+				name: "Câu hỏi thường gặp",
+				path: "/(protected)/faqs",
 			},
 			{
 				icon: (
@@ -163,7 +166,7 @@ export default function SettingScreen() {
 			>
 				<ScrollView
 					style={styles.content}
-					contentContainerStyle={{ paddingBottom: 35 }}
+					contentContainerStyle={{ paddingBottom: 60 }}
 				>
 					{/* Header */}
 					<HeaderOther />

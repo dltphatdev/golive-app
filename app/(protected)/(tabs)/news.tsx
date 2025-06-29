@@ -38,7 +38,7 @@ export default function NewsScreen() {
 			>
 				<ScrollView
 					style={styles.content}
-					contentContainerStyle={{ paddingBottom: 25 }}
+					contentContainerStyle={{ paddingBottom: 60 }}
 				>
 					{/* Header */}
 					<View style={styles.wrapContent}>
