@@ -9,8 +9,9 @@ type ActivitySampleWithActivity = {
 
 const getStepCount = async (startDate: string, endDate: string) => {
 	const res = await GoogleFit.getDailyStepCountSamples({ startDate, endDate });
-	const steps = res.find((r) => r.source === "com.google.android.gms");
-	return steps?.steps?.[0]?.value ?? 0;
+	const source = res.find((r) => r.source?.includes("com.google.android.gms"));
+	const total = source?.steps?.reduce((sum, s) => sum + (s.value ?? 0), 0) ?? 0;
+	return total;
 };
 
 const getDistance = async (startDate: string, endDate: string) => {

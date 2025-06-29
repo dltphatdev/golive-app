@@ -24,18 +24,56 @@ const slideData: SlideData[] = [
 	{ id: "3", image: require("@/assets/images/b3.jpg") },
 ];
 
+// 👉 Tạo mảng slide có clone đầu/cuối
+const loopSlides = [
+	slideData[slideData.length - 1], // clone cuối lên đầu
+	...slideData,
+	slideData[0], // clone đầu xuống cuối
+];
+
 const SlideCarousel: React.FC = () => {
 	const scrollX = useRef(new Animated.Value(0)).current;
 	const scrollRef = useRef<ScrollView>(null);
-	const [currentIndex, setCurrentIndex] = useState(0);
+	const [currentIndex, setCurrentIndex] = useState(1);
 
 	const SLIDE_WIDTH = screenWidth * 0.72;
 	const SIDE_PADDING = screenWidth * 0.14;
 
+	// 👉 Scroll đến slide thật đầu tiên khi khởi tạo
+	useEffect(() => {
+		setTimeout(() => {
+			scrollRef.current?.scrollTo({
+				x: SLIDE_WIDTH,
+				animated: true,
+			});
+		}, 10);
+	}, [SLIDE_WIDTH]);
+
 	const handleScrollEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
 		const offsetX = e.nativeEvent.contentOffset.x;
-		const index = Math.round(offsetX / SLIDE_WIDTH);
-		setCurrentIndex(index);
+		let index = Math.round(offsetX / SLIDE_WIDTH);
+
+		if (index === 0) {
+			// clone cuối → reset về cuối thật
+			setTimeout(() => {
+				scrollRef.current?.scrollTo({
+					x: slideData.length * SLIDE_WIDTH,
+					animated: false,
+				});
+				setCurrentIndex(slideData.length);
+			}, 32);
+		} else if (index === loopSlides.length - 1) {
+			// clone đầu → reset về đầu thật
+			setTimeout(() => {
+				scrollRef.current?.scrollTo({
+					x: SLIDE_WIDTH,
+					animated: false,
+				});
+				setCurrentIndex(1);
+			}, 32);
+		} else {
+			setCurrentIndex(index);
+		}
 	};
 
 	const scrollToIndex = useCallback(
@@ -48,15 +86,13 @@ const SlideCarousel: React.FC = () => {
 		[SLIDE_WIDTH]
 	);
 
-	// Auto-play logic
+	// Auto-play
 	useEffect(() => {
 		const interval = setInterval(() => {
 			let nextIndex = currentIndex + 1;
-			if (nextIndex >= slideData.length) nextIndex = 0;
 			scrollToIndex(nextIndex);
-		}, 3000); // 3 giây
-
-		return () => clearInterval(interval); // Cleanup
+		}, 3000);
+		return () => clearInterval(interval);
 	}, [currentIndex, scrollToIndex]);
 
 	const renderSlide = (item: SlideData, index: number) => {
@@ -74,7 +110,7 @@ const SlideCarousel: React.FC = () => {
 
 		return (
 			<Animated.View
-				key={item.id}
+				key={index}
 				style={[
 					styles.slide,
 					{
@@ -105,7 +141,7 @@ const SlideCarousel: React.FC = () => {
 				)}
 				onMomentumScrollEnd={handleScrollEnd}
 			>
-				{slideData.map(renderSlide)}
+				{loopSlides.map(renderSlide)}
 			</Animated.ScrollView>
 
 			<View style={styles.dotsContainer}>
@@ -114,9 +150,11 @@ const SlideCarousel: React.FC = () => {
 						key={index}
 						style={[
 							styles.dot,
-							currentIndex === index ? styles.activeDot : styles.inactiveDot,
+							currentIndex === index + 1
+								? styles.activeDot
+								: styles.inactiveDot,
 						]}
-						onPress={() => scrollToIndex(index)}
+						onPress={() => scrollToIndex(index + 1)}
 					/>
 				))}
 			</View>

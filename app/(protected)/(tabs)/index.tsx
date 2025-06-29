@@ -13,6 +13,7 @@ import { useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen() {
+	//  const [data, setData] = useState<any>(null);
 	const [dataStep, setDataStep] = useState<GetStepRes>();
 	const goal = 5000;
 	useStepWhenAppOpen(); // Khi mở app
@@ -33,6 +34,15 @@ export default function HomeScreen() {
 	};
 
 	// const data = useStepTracker(); // tự động chạy mỗi 5s và trả về stepData
+
+	// useEffect(() => {
+	// 	const loadData = async () => {
+	// 		const fitData = await getGoogleFitDataAndroid();
+	// 		setData(fitData);
+	// 	};
+
+	// 	loadData();
+	// }, []);
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -79,6 +89,16 @@ export default function HomeScreen() {
 					</View>
 					{/* <View>
 						<Text>Bước chân hôm nay: {data?.steps ?? 0}</Text>
+					</View> */}
+					{/* <View>
+						<Text>Số bước: {data.steps}</Text>
+						<Text>Quãng đường: {data.distance.toFixed(2)} m</Text>
+						<Text>Calories: {data.calories.toFixed(2)} kcal</Text>
+						<Text>Nhịp tim: {data.heartRate?.length ?? 0} mẫu</Text>
+						<Text>Giấc ngủ: {data.sleep?.length ?? 0} phiên</Text>
+						<Text>Cân nặng: {data.weight ?? "N/A"} kg</Text>
+						<Text>Thời gian bắt đầu: {data.startTime ?? "?"}</Text>
+						<Text>Thời gian kết thúc: {data.endTime ?? "?"}</Text>
 					</View> */}
 				</ScrollView>
 			</LinearGradient>
