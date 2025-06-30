@@ -3,8 +3,6 @@ import { CircleProgress } from "@/components/CircleProgress";
 import Header from "@/components/Header";
 import MetricCard from "@/components/MetricCard";
 import WeeklyChart from "@/components/WeeklyChart";
-import useStepSyncOnFocus from "@/hooks/useStepSyncOnFocus";
-import useStepWhenAppOpen from "@/hooks/useStepWhenAppOpen";
 import { ChartStep, GetStepRes } from "@/types/step";
 import { useQuery } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
@@ -13,11 +11,11 @@ import { useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen() {
-	//  const [data, setData] = useState<any>(null);
+	// const [data, setData] = useState<any>(null);
 	const [dataStep, setDataStep] = useState<GetStepRes>();
 	const goal = 5000;
-	useStepWhenAppOpen(); // Khi mở app
-	useStepSyncOnFocus(); // Khi app quay lại
+	// useStepWhenAppOpen(); // Khi mở app
+	// useStepSyncOnFocus(); // Khi app quay lại
 
 	const getStepLogMutation = useQuery({
 		queryKey: ["get_step_logs"],

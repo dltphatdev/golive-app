@@ -1,3 +1,4 @@
+import { Alert } from "react-native";
 import GoogleFit, { BucketUnit, Scopes } from "react-native-google-fit";
 type ActivitySampleWithActivity = {
 	start: string;
@@ -8,10 +9,29 @@ type ActivitySampleWithActivity = {
 };
 
 const getStepCount = async (startDate: string, endDate: string) => {
-	const res = await GoogleFit.getDailyStepCountSamples({ startDate, endDate });
-	const source = res.find((r) => r.source?.includes("com.google.android.gms"));
-	const total = source?.steps?.reduce((sum, s) => sum + (s.value ?? 0), 0) ?? 0;
-	return total;
+	try {
+		const res = await GoogleFit.getDailyStepCountSamples({
+			startDate,
+			endDate,
+		});
+		if (!res || !Array.isArray(res)) {
+			console.warn("No step count data found.");
+			return 0;
+		}
+		const source = res.find((r) =>
+			r.source?.toLowerCase().includes("com.google.android.gms")
+		);
+		if (!source || !Array.isArray(source.steps)) {
+			console.warn("No Google step source found.");
+			return 0;
+		}
+		const total =
+			source?.steps?.reduce((sum, s) => sum + (s.value ?? 0), 0) ?? 0;
+		return total;
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	} catch (error: any) {
+		Alert.alert("Error getting step count by google fitness");
+	}
 };
 
 const getDistance = async (startDate: string, endDate: string) => {
@@ -76,19 +96,22 @@ const getStartEndTime = async (startDate: string, endDate: string) => {
 
 export const getGoogleFitDataAndroid = async () => {
 	try {
+		await GoogleFit.authorize({
+			scopes: [
+				Scopes.FITNESS_ACTIVITY_READ,
+				Scopes.FITNESS_LOCATION_READ,
+				Scopes.FITNESS_BODY_READ,
+				Scopes.FITNESS_NUTRITION_READ,
+				Scopes.FITNESS_SLEEP_READ,
+				Scopes.FITNESS_HEART_RATE_READ,
+			],
+		});
+
 		await GoogleFit.checkIsAuthorized();
 
 		if (!GoogleFit.isAuthorized) {
-			await GoogleFit.authorize({
-				scopes: [
-					Scopes.FITNESS_ACTIVITY_READ,
-					Scopes.FITNESS_LOCATION_READ,
-					Scopes.FITNESS_BODY_READ,
-					Scopes.FITNESS_NUTRITION_READ,
-					Scopes.FITNESS_SLEEP_READ,
-					Scopes.FITNESS_HEART_RATE_READ,
-				],
-			});
+			Alert.alert("Google Fit not authorized.");
+			return null;
 		}
 
 		const startDate = new Date(new Date().setHours(0, 0, 0, 0)).toISOString();
@@ -122,8 +145,8 @@ export const getGoogleFitDataAndroid = async () => {
 			startTime,
 			endTime,
 		};
-	} catch (err) {
-		console.warn("Google Fit error:", err);
+	} catch (err: any) {
+		Alert.alert("Google Fit Error", err || "Unknown error");
 		return null;
 	}
 };
