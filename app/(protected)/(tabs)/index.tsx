@@ -6,11 +6,13 @@ import WeeklyChart from "@/components/WeeklyChart";
 import { ChartStep, GetStepRes } from "@/types/step";
 import { useQuery } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen() {
+	const router = useRouter();
 	// const [data, setData] = useState<any>(null);
 	const [dataStep, setDataStep] = useState<GetStepRes>();
 	const goal = 5000;
@@ -98,6 +100,11 @@ export default function HomeScreen() {
 						<Text>Thời gian bắt đầu: {data.startTime ?? "?"}</Text>
 						<Text>Thời gian kết thúc: {data.endTime ?? "?"}</Text>
 					</View> */}
+					{/* <TouchableOpacity
+						onPress={() => router.push("/(protected)/tracking-step")}
+					>
+						<Text>Test tracking step</Text>
+					</TouchableOpacity> */}
 				</ScrollView>
 			</LinearGradient>
 		</SafeAreaView>
