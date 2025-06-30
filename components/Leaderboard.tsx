@@ -65,7 +65,7 @@ export default function LeaderBoard({ data }: Props) {
 					</View>
 
 					{/* Name */}
-					<Text numberOfLines={2} ellipsizeMode="tail" style={styles.userName}>
+					<Text numberOfLines={1} ellipsizeMode="tail" style={styles.userName}>
 						{user.fullname || ""}
 					</Text>
 

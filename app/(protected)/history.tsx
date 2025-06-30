@@ -16,12 +16,16 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function HistoryScreen() {
 	const { profile } = useContext(AppContext);
+	const now = new Date().toISOString();
 	const getStepLogMutation = useQuery({
 		queryKey: ["get_step_history_logs"],
 		queryFn: stepApi.getStepLog,
 	});
 
 	const getStepHistoryLogs = getStepLogMutation.data?.data.data.logs;
+	const updatedAt =
+		getStepHistoryLogs?.find((item) => item.user_id === profile?.id)
+			?.updated_at || "";
 	return (
 		<SafeAreaView style={styles.container}>
 			<LinearGradient
@@ -56,8 +60,12 @@ export default function HistoryScreen() {
 							<View style={styles.historyTimeInfo}>
 								<Text style={styles.historyTimeInfoLabel}>Cập nhật lúc</Text>
 								<Text style={styles.historyTimeInfoLabelNumber}>
-									{formatedTime(profile?.updated_at) || "00:00:00"}
-									{formatedDate(profile?.updated_at) || "00/00/0000"}
+									{formatedDate(now) === formatedDate(updatedAt)
+										? formatedTime(updatedAt)
+										: "00:00:00"}{" "}
+									{formatedDate(now) === formatedDate(updatedAt)
+										? formatedDate(updatedAt)
+										: "00/00/0000"}
 								</Text>
 							</View>
 						</View>

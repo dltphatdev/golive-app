@@ -115,12 +115,17 @@ export default function SupportScreen() {
 							>
 								<Ionicons name="arrow-back" size={24} color="white" />
 							</TouchableOpacity>
-							<Image source={require("@/assets/images/bg-auth.png")} />
+							<Image
+								source={require("@/assets/images/bg-auth.png")}
+								resizeMode="cover"
+							/>
 						</View>
 
 						{/* Nội dung chính */}
 						<View style={styles.formContainer}>
-							<Text style={styles.title}>Trang hỗ trợ khách hàng</Text>
+							<Text style={styles.title} numberOfLines={2}>
+								Trang hỗ trợ khách hàng
+							</Text>
 
 							{/* Email */}
 							<Controller
@@ -277,7 +282,7 @@ const styles = StyleSheet.create({
 	formContainer: {
 		flex: 1,
 		paddingHorizontal: 24,
-		marginTop: -80,
+		// marginTop: -80,
 		backgroundColor: "#fff",
 		paddingTop: 40,
 	},

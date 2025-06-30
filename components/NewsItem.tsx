@@ -1,5 +1,4 @@
-import { formatedDate } from "@/utils/common";
-import { Feather } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import {
 	Dimensions,
 	Image,
@@ -19,32 +18,19 @@ interface Props {
 		image: ImageSourcePropType;
 	};
 }
-
 export default function NewsItem({ newsItem }: Props) {
+	const router = useRouter();
 	return (
-		<TouchableOpacity style={styles.newsItem}>
+		<TouchableOpacity
+			style={styles.newsItem}
+			onPress={() => router.push(`/news-detail/${newsItem.id}`)}
+		>
 			<Image source={newsItem.image} style={styles.newsImg} />
 			<View style={styles.newsContent}>
 				<View style={styles.newsContainerTitle}>
 					<Text style={styles.newsTitle} numberOfLines={2}>
 						{newsItem.title}
 					</Text>
-				</View>
-				{/* <View style={styles.newsContainerTitle}>
-					<Text style={styles.newsTitle} numberOfLines={2}>
-						{newsItem.description}
-					</Text>
-				</View> */}
-				<View style={styles.meta}>
-					<View style={styles.likes}>
-						<Feather name="heart" size={14} color="#fff" />
-						<Text style={styles.metaText}>3.4k</Text>
-					</View>
-					<View style={styles.boxMetaText}>
-						<Text style={styles.metaText}>
-							{formatedDate(new Date().toISOString())}
-						</Text>
-					</View>
 				</View>
 			</View>
 		</TouchableOpacity>
@@ -83,31 +69,5 @@ const styles = StyleSheet.create({
 		color: "#fff",
 		fontWeight: "500",
 		textTransform: "uppercase",
-	},
-	meta: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		gap: 5,
-	},
-	likes: {
-		flexDirection: "row",
-		alignItems: "center",
-		paddingVertical: 3,
-		paddingInline: 8,
-		borderRadius: 14,
-		backgroundColor: "rgba(161,161,162,0.4)",
-	},
-	boxMetaText: {
-		paddingVertical: 5,
-		paddingInline: 8,
-		borderRadius: 14,
-		backgroundColor: "rgba(161,161,162,0.4)",
-	},
-	metaText: {
-		fontSize: 9,
-		color: "#fff",
-		fontWeight: "500",
-		marginLeft: 4,
 	},
 });

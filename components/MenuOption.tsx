@@ -32,8 +32,9 @@ export default function MenuOption({ data }: Props) {
 							{item.items.map((itm, i) => {
 								const borderBottom = i !== item.items.length - 1 ? 1 : 0;
 								return (
-									<View
+									<TouchableOpacity
 										key={i}
+										onPress={() => router.push(itm.path || "/")}
 										style={[
 											styles.menuOptionItem,
 											{
@@ -46,16 +47,12 @@ export default function MenuOption({ data }: Props) {
 											{itm.icon}
 											<Text style={styles.menuOptionText}>{itm.name}</Text>
 										</View>
-										<TouchableOpacity
-											onPress={() => router.push(itm.path || "/")}
-										>
-											<FontAwesome5
-												name="chevron-right"
-												size={14}
-												color="rgba(255, 255, 255, 0.9)"
-											/>
-										</TouchableOpacity>
-									</View>
+										<FontAwesome5
+											name="chevron-right"
+											size={14}
+											color="rgba(255, 255, 255, 0.9)"
+										/>
+									</TouchableOpacity>
 								);
 							})}
 						</LinearGradient>
