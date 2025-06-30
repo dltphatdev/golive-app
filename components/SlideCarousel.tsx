@@ -3,8 +3,10 @@ import {
 	Animated,
 	Dimensions,
 	Image,
+	Linking,
 	NativeScrollEvent,
 	NativeSyntheticEvent,
+	Pressable,
 	ScrollView,
 	StyleSheet,
 	TouchableOpacity,
@@ -16,12 +18,25 @@ const { width: screenWidth } = Dimensions.get("window");
 interface SlideData {
 	id: string;
 	image: any;
+	link: string;
 }
 
 const slideData: SlideData[] = [
-	{ id: "1", image: require("@/assets/images/b1.jpg") },
-	{ id: "2", image: require("@/assets/images/b2.jpg") },
-	{ id: "3", image: require("@/assets/images/b3.jpg") },
+	{
+		id: "1",
+		image: require("@/assets/images/b1.jpg"),
+		link: "http://mbbank.com.vn/",
+	},
+	{
+		id: "2",
+		image: require("@/assets/images/b2.jpg"),
+		link: "https://co-opmart.com.vn/",
+	},
+	{
+		id: "3",
+		image: require("@/assets/images/b3.jpg"),
+		link: "https://abtower.vn/",
+	},
 ];
 
 // 👉 Tạo mảng slide có clone đầu/cuối
@@ -109,18 +124,20 @@ const SlideCarousel: React.FC = () => {
 		});
 
 		return (
-			<Animated.View
-				key={index}
-				style={[
-					styles.slide,
-					{
-						width: SLIDE_WIDTH,
-						transform: [{ scale }],
-					},
-				]}
-			>
-				<Image source={item.image} style={styles.image} />
-			</Animated.View>
+			<Pressable onPress={() => Linking.openURL(item.link)} key={index}>
+				<Animated.View
+					key={index}
+					style={[
+						styles.slide,
+						{
+							width: SLIDE_WIDTH,
+							transform: [{ scale }],
+						},
+					]}
+				>
+					<Image source={item.image} style={styles.image} />
+				</Animated.View>
+			</Pressable>
 		);
 	};
 
