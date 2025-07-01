@@ -7,12 +7,14 @@ import usePedometerSteps from "@/hooks/usePedometerSteps";
 import { ChartStep, GetStepRes } from "@/types/step";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen() {
 	const [dataStep, setDataStep] = useState<GetStepRes>();
 	const { steps, startStepTime, lastStepTime } = usePedometerSteps();
+
+	const lastSyncedStepRef = useRef<number>(0);
 	const totalStep = useMemo(
 		() => Number(dataStep?.stepLogToday.steps) + steps,
 		[dataStep?.stepLogToday.steps, steps]
@@ -33,9 +35,11 @@ export default function HomeScreen() {
 	useEffect(() => {
 		const interval = setInterval(async () => {
 			if (
-				totalStep > Number(dataStep?.stepLogToday.steps) &&
+				totalStep > Number(dataStep?.stepLogToday.steps) && // phải lớn hơn db
+				totalStep <= 5000 &&
 				startStepTime &&
-				lastStepTime
+				lastStepTime &&
+				totalStep !== lastSyncedStepRef.current
 			) {
 				try {
 					await updateStepMutation.mutateAsync({
@@ -43,6 +47,7 @@ export default function HomeScreen() {
 						start_time: startStepTime?.toISOString() as string,
 						last_time: lastStepTime?.toISOString() as string,
 					});
+					lastSyncedStepRef.current = totalStep;
 				} catch (err) {
 					console.error("❌ Sync lỗi:", err);
 				}
