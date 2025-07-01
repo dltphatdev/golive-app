@@ -14,13 +14,10 @@ export function formatNumberCurrency(currency: number) {
 }
 
 export function formatNumberToSocicalStyle(value: number) {
-	return Intl.NumberFormat("en", {
-		notation: "compact",
-		maximumFractionDigits: 1,
-	})
-		.format(value)
-		.replace(".", ",")
-		.toLocaleLowerCase();
+	if (value >= 1000000)
+		return (value / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+	if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, "") + "k";
+	return value.toString();
 }
 
 export function isAxiosUnprocessableEntityError<UnprocessableEntityError>(

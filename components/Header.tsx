@@ -57,7 +57,9 @@ export default function Header({ onSendData }: Props) {
 			>
 				<HeaderSpoint width={21} />
 				<Text style={styles.headerSpointNumber}>
-					{formatNumberCurrency(dataStep?.stepLogToday.spoint_earned || 0)}
+					{profile?.spoint
+						? formatNumberCurrency(profile.spoint).toString()
+						: "00.00"}
 				</Text>
 			</TouchableOpacity>
 		</View>

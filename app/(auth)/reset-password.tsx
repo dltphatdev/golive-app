@@ -92,12 +92,9 @@ export default function ResetPasswordScreen() {
 					keyboardShouldPersistTaps="handled"
 				>
 					<View
-						style={[
-							styles.container,
-							{ paddingTop: insets.top, paddingBottom: insets.bottom + 24 },
-						]}
+						style={[styles.container, { paddingBottom: insets.bottom + 24 }]}
 					>
-						<View>
+						<View style={{ backgroundColor: "#246BFD" }}>
 							<TouchableOpacity
 								onPress={() => router.push("/login")}
 								style={styles.backButton}
@@ -200,7 +197,7 @@ const styles = StyleSheet.create({
 	},
 	backButton: {
 		position: "absolute",
-		top: 14,
+		top: 28,
 		left: 14,
 		zIndex: 10,
 		padding: 8,

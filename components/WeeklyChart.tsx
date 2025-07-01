@@ -1,7 +1,6 @@
 import Check from "@/assets/images/Check.svg";
 import { ChartStep } from "@/types/step";
 import { formatNumberToSocicalStyle } from "@/utils/common";
-import { sortChartDataByWeek } from "@/utils/sortChartDataByWeek";
 import { LinearGradient } from "expo-linear-gradient";
 import {
 	Dimensions,
@@ -20,14 +19,14 @@ const { width } = Dimensions.get("window");
 
 export default function WeeklyChart({ data }: Props) {
 	if (!data || !data.length) return null;
-	const sortedData = sortChartDataByWeek(data);
+
 	const chartWidth = width - 40; // 40 = 20 padding trái + phải
 	const chartHeight = 90;
 	const columnCount = 7;
 	const labelWidth = chartWidth / columnCount;
 
 	// Tính toán các điểm (x, y)
-	const chartPoints = sortedData.map((item, index) => {
+	const chartPoints = data.map((item, index) => {
 		const x = index * labelWidth + labelWidth / 2;
 		let y = chartHeight - (item.chartValue / 100) * chartHeight;
 		return { x, y };
@@ -45,7 +44,7 @@ export default function WeeklyChart({ data }: Props) {
 			<View style={styles.content}>
 				{/* Header (icon + label) */}
 				<View style={[styles.headerRow, { width: chartWidth }]}>
-					{sortedData.map((item: ChartStep, index: number) => (
+					{data.map((item: ChartStep, index: number) => (
 						<View
 							key={index}
 							style={{
@@ -91,7 +90,7 @@ export default function WeeklyChart({ data }: Props) {
 
 				{/* Value labels */}
 				<View style={[styles.valueRow]}>
-					{sortedData.map((item: ChartStep, index: number) => (
+					{data.map((item: ChartStep, index: number) => (
 						<View
 							key={index}
 							style={[styles.valueContainer, { width: labelWidth - 8 }]}

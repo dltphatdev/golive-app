@@ -38,7 +38,9 @@ export default function RankScreen() {
 						{rankSpointUser &&
 							rankSpointUser.length > 0 &&
 							rankSpointUser.map((item, index) => {
-								return <RankItem key={item.id} index={index} data={item} />;
+								if (item.spoint) {
+									return <RankItem key={item.id} index={index} data={item} />;
+								}
 							})}
 					</View>
 				</ScrollView>

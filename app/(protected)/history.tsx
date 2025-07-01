@@ -16,7 +16,6 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function HistoryScreen() {
 	const { profile } = useContext(AppContext);
-	const now = new Date().toISOString();
 	const getStepLogMutation = useQuery({
 		queryKey: ["get_step_history_logs"],
 		queryFn: stepApi.getStepLog,
@@ -60,20 +59,18 @@ export default function HistoryScreen() {
 							<View style={styles.historyTimeInfo}>
 								<Text style={styles.historyTimeInfoLabel}>Cập nhật lúc</Text>
 								<Text style={styles.historyTimeInfoLabelNumber}>
-									{formatedDate(now) === formatedDate(updatedAt)
-										? formatedTime(updatedAt)
-										: "00:00:00"}{" "}
-									{formatedDate(now) === formatedDate(updatedAt)
-										? formatedDate(updatedAt)
-										: "00/00/0000"}
+									{formatedTime(updatedAt)} {formatedDate(updatedAt)}
 								</Text>
 							</View>
 						</View>
 						<View style={styles.historyLine}></View>
 						<View style={styles.cardSpointBox}>
-							<CardSpoint />
-							<CardSpoint />
-							<CardSpoint />
+							<CardSpoint title="Đã dùng" />
+							<CardSpoint
+								title="Còn lại"
+								spoint={formatNumberCurrency(profile?.spoint as number)}
+							/>
+							<CardSpoint title="Hết hạn" />
 						</View>
 					</LinearGradient>
 
@@ -85,14 +82,16 @@ export default function HistoryScreen() {
 							getStepHistoryLogs.map((item, index) => {
 								const marginBottomNumber =
 									index === getStepHistoryLogs.length - 1 ? 0 : 10;
-								return (
-									<View
-										key={item.id}
-										style={[{ marginBottom: marginBottomNumber }]}
-									>
-										<HistoryItem log={item} />
-									</View>
-								);
+								if (item.spoint_earned) {
+									return (
+										<View
+											key={item.id}
+											style={[{ marginBottom: marginBottomNumber }]}
+										>
+											<HistoryItem log={item} />
+										</View>
+									);
+								}
 							})}
 					</View>
 				</ScrollView>

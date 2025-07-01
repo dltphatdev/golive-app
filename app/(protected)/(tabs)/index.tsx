@@ -3,28 +3,61 @@ import { CircleProgress } from "@/components/CircleProgress";
 import Header from "@/components/Header";
 import MetricCard from "@/components/MetricCard";
 import WeeklyChart from "@/components/WeeklyChart";
+import usePedometerSteps from "@/hooks/usePedometerSteps";
 import { ChartStep, GetStepRes } from "@/types/step";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { useState } from "react";
-
+import { useEffect, useMemo, useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen() {
-	const router = useRouter();
-	// const [data, setData] = useState<any>(null);
 	const [dataStep, setDataStep] = useState<GetStepRes>();
+	const { steps, startStepTime, lastStepTime } = usePedometerSteps();
+	const totalStep = useMemo(
+		() => Number(dataStep?.stepLogToday.steps) + steps,
+		[dataStep?.stepLogToday.steps, steps]
+	);
 	const goal = 5000;
-	// useStepWhenAppOpen(); // Khi mở app
-	// useStepSyncOnFocus(); // Khi app quay lại
 
 	const getStepLogMutation = useQuery({
 		queryKey: ["get_step_logs"],
 		queryFn: stepApi.getStepLog,
 	});
 
+	const updateStepMutation = useMutation({
+		mutationFn: stepApi.updateStep,
+	});
+
 	const getStepLogs = getStepLogMutation.data?.data.data.logs;
+
+	useEffect(() => {
+		const interval = setInterval(async () => {
+			if (
+				totalStep > Number(dataStep?.stepLogToday.steps) &&
+				startStepTime &&
+				lastStepTime
+			) {
+				try {
+					await updateStepMutation.mutateAsync({
+						steps: totalStep,
+						start_time: startStepTime?.toISOString() as string,
+						last_time: lastStepTime?.toISOString() as string,
+					});
+				} catch (err) {
+					console.error("❌ Sync lỗi:", err);
+				}
+			}
+		}, 5000);
+
+		return () => clearInterval(interval);
+	}, [
+		steps,
+		startStepTime,
+		lastStepTime,
+		totalStep,
+		updateStepMutation,
+		dataStep?.stepLogToday.steps,
+	]);
 
 	const handleReceiveStepsFromHeaderComponent = (data: GetStepRes) => {
 		if (data) {
@@ -32,17 +65,6 @@ export default function HomeScreen() {
 		}
 		return;
 	};
-
-	// const data = useStepTracker(); // tự động chạy mỗi 5s và trả về stepData
-
-	// useEffect(() => {
-	// 	const loadData = async () => {
-	// 		const fitData = await getGoogleFitDataAndroid();
-	// 		setData(fitData);
-	// 	};
-
-	// 	loadData();
-	// }, []);
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -87,24 +109,6 @@ export default function HomeScreen() {
 								);
 							})}
 					</View>
-					{/* <View>
-						<Text>Bước chân hôm nay: {data?.steps ?? 0}</Text>
-					</View> */}
-					{/* <View>
-						<Text>Số bước: {data.steps}</Text>
-						<Text>Quãng đường: {data.distance.toFixed(2)} m</Text>
-						<Text>Calories: {data.calories.toFixed(2)} kcal</Text>
-						<Text>Nhịp tim: {data.heartRate?.length ?? 0} mẫu</Text>
-						<Text>Giấc ngủ: {data.sleep?.length ?? 0} phiên</Text>
-						<Text>Cân nặng: {data.weight ?? "N/A"} kg</Text>
-						<Text>Thời gian bắt đầu: {data.startTime ?? "?"}</Text>
-						<Text>Thời gian kết thúc: {data.endTime ?? "?"}</Text>
-					</View> */}
-					{/* <TouchableOpacity
-						onPress={() => router.push("/(protected)/tracking-step")}
-					>
-						<Text>Test tracking step</Text>
-					</TouchableOpacity> */}
 				</ScrollView>
 			</LinearGradient>
 		</SafeAreaView>

@@ -13,7 +13,7 @@ export const CircleProgress = ({ steps, goal }: Props) => {
 	return (
 		<View>
 			<ImageBackground
-				resizeMode="center"
+				resizeMode="contain"
 				source={require("@/assets/images/bg-progess.png")}
 			>
 				<View style={styles.container}>

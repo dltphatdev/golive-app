@@ -1,13 +1,16 @@
 import stepApi from "@/apis/step.api";
 import HeaderSpoint from "@/assets/images/header-spoint.svg";
 import StrakeIcon from "@/assets/images/strake.svg";
+import { AppContext } from "@/context/app.context";
 import { formatNumberCurrency } from "@/utils/common";
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
+import { useContext } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function HeaderOther() {
+	const { profile } = useContext(AppContext);
 	const router = useRouter();
 	const getStepMutation = useQuery({
 		queryKey: ["get_step"],
@@ -34,7 +37,9 @@ export default function HeaderOther() {
 			>
 				<HeaderSpoint width={21} />
 				<Text style={styles.headerSpointNumber}>
-					{formatNumberCurrency(dataStep?.stepLogToday.spoint_earned || 0)}
+					{profile?.spoint
+						? formatNumberCurrency(profile.spoint).toString()
+						: "00.00"}
 				</Text>
 			</TouchableOpacity>
 		</View>

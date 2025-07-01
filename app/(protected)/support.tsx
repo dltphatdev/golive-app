@@ -5,12 +5,12 @@ import { supportSchema } from "@/utils/validation";
 import { Ionicons } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation } from "@tanstack/react-query";
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Controller, Resolver, useForm } from "react-hook-form";
 import {
 	ActivityIndicator,
 	Alert,
-	Image,
 	Keyboard,
 	KeyboardAvoidingView,
 	Platform,
@@ -103,12 +103,9 @@ export default function SupportScreen() {
 					keyboardShouldPersistTaps="handled"
 				>
 					<View
-						style={[
-							styles.container,
-							{ paddingTop: insets.top, paddingBottom: insets.bottom + 24 },
-						]}
+						style={[styles.container, { paddingBottom: insets.bottom + 24 }]}
 					>
-						<View>
+						<View style={{ backgroundColor: "#246BFD" }}>
 							<TouchableOpacity
 								onPress={() => router.back()}
 								style={styles.backButton}
@@ -117,7 +114,7 @@ export default function SupportScreen() {
 							</TouchableOpacity>
 							<Image
 								source={require("@/assets/images/bg-auth.png")}
-								resizeMode="cover"
+								style={{ height: 240, objectFit: "contain" }}
 							/>
 						</View>
 
@@ -267,7 +264,7 @@ const styles = StyleSheet.create({
 	},
 	backButton: {
 		position: "absolute",
-		top: 14,
+		top: 28,
 		left: 14,
 		zIndex: 10,
 		padding: 8,

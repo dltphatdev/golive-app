@@ -1,14 +1,19 @@
 import Spoint from "@/assets/images/header-spoint.svg";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function CardSpoint() {
+interface Props {
+	title: string;
+	spoint?: number | string;
+}
+
+export default function CardSpoint({ title, spoint = "00.00" }: Props) {
 	return (
 		<View style={styles.container}>
 			<View style={styles.cardTop}>
 				<Spoint width={21} />
-				<Text style={styles.spoint}>00.00</Text>
+				<Text style={styles.spoint}>{spoint}</Text>
 			</View>
-			<Text style={styles.label}>Đã dùng</Text>
+			<Text style={styles.label}>{title}</Text>
 		</View>
 	);
 }
