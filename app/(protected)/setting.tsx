@@ -166,7 +166,7 @@ export default function SettingScreen() {
 			>
 				<ScrollView
 					style={styles.content}
-					contentContainerStyle={{ paddingBottom: 60 }}
+					contentContainerStyle={{ paddingBottom: 120 }}
 				>
 					{/* Header */}
 					<HeaderOther />

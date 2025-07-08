@@ -60,7 +60,8 @@ export default function TabBarButton({
 					alignItems: "center",
 					justifyContent: "space-between",
 					borderRadius: 10,
-					minWidth: isFocused ? 126 : 60,
+					minWidth: isFocused ? 100 : 60,
+					maxWidth: 110,
 				},
 				backgroundStyle,
 			]}
@@ -71,7 +72,7 @@ export default function TabBarButton({
 						alignItems: "center",
 						justifyContent: "center",
 						flexDirection: "row",
-						gap: 8,
+						gap: 5,
 						padding: 16,
 					},
 					animatedStyle,
@@ -81,7 +82,7 @@ export default function TabBarButton({
 
 				<Text
 					style={{
-						fontSize: 14,
+						fontSize: 12,
 						color: "rgba(34, 34, 96, 1)",
 						marginTop: 5,
 						display: isFocused ? "flex" : "none",

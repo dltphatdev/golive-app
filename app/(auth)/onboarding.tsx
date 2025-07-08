@@ -11,6 +11,7 @@ import {
 	View,
 	ViewToken,
 } from "react-native";
+import { RFValue } from "react-native-responsive-fontsize";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
@@ -18,7 +19,7 @@ const { width } = Dimensions.get("window");
 const slides = [
 	{
 		id: "1",
-		title: "Đi bộ mỗi ngày\ncùng GoLive",
+		title: "Đi bộ mỗi ngày cùng GoLive",
 		description:
 			"Đi bộ mỗi ngày, sức khỏe mỗi phút. Hãy để GoLive app cùng bạn nâng cao sức khoẻ của mình mỗi ngày.",
 		backgroundColor: "#CDE3F3",
@@ -26,7 +27,7 @@ const slides = [
 	},
 	{
 		id: "2",
-		title: "Vóc dáng\ncân đối cùng GoLive",
+		title: "Vóc dáng cân đối cùng GoLive",
 		description:
 			"Vóc dáng thon gọn, tự tin toả sáng. Hãy để GoLive app cùng bạn cải thiện vóc dáng của mình mỗi ngày.",
 		backgroundColor: "#D4ECCD",
@@ -34,7 +35,7 @@ const slides = [
 	},
 	{
 		id: "3",
-		title: "Tích điểm\nmua sắm cùng GoLive",
+		title: "Tích điểm mua sắm cùng GoLive",
 		description: "Tích điểm đổi quà, mua sắm thả ga cùng GoLive app.",
 		backgroundColor: "#F8EED4",
 		image: require("@/assets/images/start.png"),
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
 		paddingInline: 32,
 	},
 	title: {
-		fontSize: 48,
+		fontSize: RFValue(34),
 		fontWeight: "600",
 		color: "#000",
 	},
