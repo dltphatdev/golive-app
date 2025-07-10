@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import { FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -139,8 +140,112 @@ const categories: Category[] = [
 	},
 ];
 
-const { width } = Dimensions.get("window");
+const products = [
+	{
+		id: 1,
+		title: "Product name 1",
+		star: 4,
+		sold: 1000,
+		view: 683,
+		price: 8.95,
+		unit: "$",
+		type: "dexuat",
+		image: require("@/assets/images/noimage.png"),
+	},
+	{
+		id: 2,
+		title: "Product name 2",
+		star: 3.2,
+		sold: 2000,
+		view: 1083,
+		price: 10.95,
+		unit: "$",
+		type: "dexuat",
+		image: require("@/assets/images/noimage.png"),
+	},
+	{
+		id: 3,
+		title: "Product name 3",
+		star: 5,
+		sold: 2200,
+		view: 83,
+		price: 20.95,
+		unit: "$",
+		type: "dexuat",
+		image: require("@/assets/images/noimage.png"),
+	},
+	{
+		id: 4,
+		title: "Product name 4",
+		star: 2.8,
+		sold: 1200,
+		view: 1283,
+		price: 5.95,
+		unit: "$",
+		type: "dexuat",
+		image: require("@/assets/images/noimage.png"),
+	},
+	{
+		id: 5,
+		title: "Product name 5",
+		star: 2.8,
+		view: 203,
+		price: 8.95,
+		unit: "$",
+		type: "banchay",
+		image: require("@/assets/images/noimage.png"),
+	},
+	{
+		id: 6,
+		title: "Product name 6",
+		star: 3.8,
+		view: 103,
+		price: 9.95,
+		unit: "$",
+		type: "banchay",
+		image: require("@/assets/images/noimage.png"),
+	},
+	{
+		id: 7,
+		title: "Product name 7",
+		star: 4.8,
+		view: 83,
+		price: 19.95,
+		unit: "$",
+		type: "hangmoive",
+		image: require("@/assets/images/noimage.png"),
+	},
+	{
+		id: 8,
+		title: "Product name 8",
+		star: 5,
+		view: 1023,
+		price: 29.95,
+		unit: "$",
+		type: "hangmoive",
+		image: require("@/assets/images/noimage.png"),
+	},
+];
 
+const tabs = [
+	{
+		id: 1,
+		name: "Đề xuất",
+		type: "dexuat",
+	},
+	{
+		id: 2,
+		name: "Bán chạy",
+		type: "banchay",
+	},
+	{
+		id: 3,
+		name: "Hàng mới về",
+		type: "hangmoive",
+	},
+];
+
+const { width } = Dimensions.get("window");
 const chunkArray = (arr: any[], size: number) => {
 	const chunked = [];
 	for (let i = 0; i < arr.length; i += size) {
@@ -149,11 +254,20 @@ const chunkArray = (arr: any[], size: number) => {
 	return chunked;
 };
 
-export default function SettingsScreen() {
+function displayRating(order: number, rating: number) {
+	if (order <= rating) return 100;
+	if (order > rating && order - rating < 1)
+		return (rating - Math.floor(rating)) * 100;
+	return 0;
+}
+
+export default function StoreScreen() {
 	const flatListRef = useRef<FlatList>(null);
 	const [currentIndex, setCurrentIndex] = useState(0);
+	const [tabActive, setTabActive] = useState("dexuat");
 	const rows = chunkArray(categories, 8);
 	const totalSlides = rows.length;
+	const rating = 3.5;
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -204,10 +318,12 @@ export default function SettingsScreen() {
 			>
 				<ScrollView
 					style={styles.content}
-					contentContainerStyle={{ paddingBottom: 35 }}
+					contentContainerStyle={{ paddingBottom: 125 }}
 				>
 					{/* Header */}
 					<Header />
+
+					<Text style={styles.title}>Danh mục</Text>
 
 					<FlatList
 						ref={flatListRef}
@@ -218,6 +334,95 @@ export default function SettingsScreen() {
 						pagingEnabled
 						showsHorizontalScrollIndicator={false}
 					/>
+
+					<View>
+						<View style={styles.tabList}>
+							{tabs.map((tab) => {
+								const tabItemActive =
+									tabActive === tab.type ? styles.tabItemActive : "";
+								return (
+									<TouchableOpacity
+										key={tab.id}
+										style={[styles.tabItem, tabItemActive]}
+										onPress={() => setTabActive(tab.type)}
+									>
+										<Text style={styles.tabText}>{tab.name}</Text>
+									</TouchableOpacity>
+								);
+							})}
+						</View>
+
+						<View style={styles.productList}>
+							{products
+								.filter((product) => product.type === tabActive)
+								.map((product) => {
+									return (
+										<TouchableOpacity
+											key={product.id}
+											style={styles.productItem}
+											onPress={() => {}}
+										>
+											<Image source={product.image} style={styles.productImg} />
+											<View style={styles.productContent}>
+												<Text style={styles.productName}>{product.title}</Text>
+												<View style={{ flexDirection: "row" }}>
+													{Array(5)
+														.fill(0)
+														.map((_, i) => {
+															return (
+																<View
+																	key={i}
+																	style={[
+																		{
+																			position: "relative",
+																			flexDirection: "row",
+																		},
+																		{ width: 20 * 5, height: 20 },
+																	]}
+																>
+																	{/* <View
+																		style={[
+																			styles.absoluteRow,
+																			{
+																				width: `100%`,
+																			},
+																		]}
+																	>
+																		<FontAwesome
+																			key={`gray`}
+																			name="star"
+																			size={20}
+																			color="rgba(255, 255, 255, 0.15)"
+																		/>
+																	</View> */}
+																	<View
+																		style={[
+																			styles.absoluteRow,
+																			{
+																				width: `${displayRating(
+																					i + 1,
+																					rating
+																				)}%`,
+																			},
+																		]}
+																	>
+																		<FontAwesome
+																			key={`yellow`}
+																			name="star"
+																			size={20}
+																			color="rgba(255, 255, 255, 0.85)"
+																		/>
+																	</View>
+																</View>
+															);
+														})}
+												</View>
+											</View>
+										</TouchableOpacity>
+									);
+								})}
+						</View>
+					</View>
 				</ScrollView>
 			</LinearGradient>
 		</SafeAreaView>
@@ -227,6 +432,12 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
 	container: { flex: 1 },
 	gradient: { flex: 1 },
+	title: {
+		fontSize: 18,
+		fontWeight: "bold",
+		color: "rgba(255, 255, 255, 0.85)",
+		marginTop: 20,
+	},
 	content: { flex: 1, paddingVertical: 40, paddingHorizontal: 10 },
 	slide: {
 		width: width,
@@ -251,5 +462,58 @@ const styles = StyleSheet.create({
 		fontSize: 11,
 		textAlign: "center",
 		color: "white",
+	},
+	tabList: {
+		flexDirection: "row",
+		marginTop: 20,
+		gap: 10,
+		marginBottom: 16,
+	},
+	tabItem: {
+		paddingInline: 10,
+		paddingVertical: 8,
+		borderRadius: 24,
+		marginBottom: 10,
+	},
+	tabItemActive: {
+		backgroundColor: "rgba(255, 255, 255, 0.2)",
+		borderColor: "rgba(255, 255, 255, 0.8)",
+		borderWidth: 2,
+	},
+	tabText: {
+		color: "rgba(255, 255, 255, 0.85)",
+	},
+	productList: {
+		flexDirection: "row",
+		flexWrap: "wrap",
+		flex: 1,
+		justifyContent: "space-between",
+	},
+	productItem: {
+		width: width / 2 - 20,
+	},
+	productImg: {
+		width: "100%",
+		height: 269,
+		borderRadius: 12,
+	},
+	productName: {
+		fontSize: 12,
+		color: "rgba(255, 255, 255, 1)",
+	},
+	productPrice: {
+		fontSize: 12,
+		color: "rgba(255, 255, 255, 0.8)",
+	},
+	productContent: {
+		padding: 8,
+	},
+	absoluteRow: {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		height: "100%",
+		flexDirection: "row",
+		overflow: "hidden",
 	},
 });
